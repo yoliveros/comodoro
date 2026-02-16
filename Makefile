@@ -1,4 +1,5 @@
 CC = clang
+MAKEFLAGS += -j$(shell nproc)
 # I_FLAGS = -I
 # L_FLAGS = -l
 C_FLAGS = -Wall -Wextra -pedantic -std=c17 $(I_FLAGS) $(L_FLAGS)
