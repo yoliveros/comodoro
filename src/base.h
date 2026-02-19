@@ -31,9 +31,9 @@ typedef struct {
   u64 len;
 } str;
 
-#define STR_FMT(str) (int)(str).len, (str).str
+#define STR_FMT(s) (i32)(s).len, (s).str
 
-#define STR_LIT(str) (str){.str = str, .len = sizeof(str) - 1}
+#define STR_LIT(s) (str){.str = s, .len = sizeof(s) - 1}
 
 // Platform declaration
 #if defined(_WIN32)
@@ -41,9 +41,6 @@ typedef struct {
 #elif defined(__linux__)
 #define P_LINUX 1
 #endif
-
-#define TRUE 0
-#define FALSE 1
 
 static inline u64 KiB(u64 n) { return n << 10; }
 static inline u64 MiB(u64 n) { return n << 20; }
