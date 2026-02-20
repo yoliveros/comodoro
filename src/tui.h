@@ -1,6 +1,7 @@
 #pragma once
 
 #include "base.h"
+#include <sys/ioctl.h>
 
 typedef struct {
   i32 rows;
@@ -38,5 +39,7 @@ void tui_move_cursor(i32 row, i32 col);
 void tui_clear_screen(void);
 void tui_hide_cursor(void);
 void tui_show_cursor(void);
-void tui_handle_input(void);
+void tui_disable_input(void);
+void tui_enable_input(void);
+b32 tui_handle_input(void);
 void tui_progress_bar(bar_args args);

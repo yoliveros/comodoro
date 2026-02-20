@@ -22,8 +22,8 @@ typedef double f64;
 typedef i8 b8;
 typedef i32 b32;
 
-static const u8 TRUE = 1;
-static const u8 FALSE = 0;
+#define TRUE 1;
+#define FALSE 0;
 
 // String
 typedef struct {
