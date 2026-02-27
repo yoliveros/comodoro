@@ -8,6 +8,8 @@
 #include <termios.h>
 #include <unistd.h>
 
+#define T_SECONDS 60
+
 struct termios orig_termios;
 
 void tui_print(const char *fmt, ...) {
@@ -54,16 +56,16 @@ b32 tui_handle_input(void) {
   FD_ZERO(&fds);
   FD_SET(STDIN_FILENO, &fds);
 
-  struct timeval tv = {0, 0};
+  struct timeval tv = {T_SECONDS, 0};
 
   if (select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv) > 0) {
     char c;
     read(STDIN_FILENO, &c, 1);
     switch (c) {
     case 'q':
-      tui_clear_screen();
       tui_show_cursor();
       tui_enable_input();
+      tui_clear_screen();
       return FALSE;
       break;
     }
@@ -87,14 +89,15 @@ void tui_progress_bar(bar_args args) {
   else
     tui_print("Resting: %dm / %dm\n", args.remaining, args.duration);
 
-  // tui_move_cursor(args.rows, args.cols);
   for (i32 row = 0; row < 3; row++) {
     tui_move_cursor(args.rows + row, args.cols);
     for (i32 i = 0; i < args.width; i++) {
       printf("%s\u2591\033[0m", FG_MAGENTA);
     }
 
+    tui_move_cursor(args.rows + row, args.cols);
     for (i32 i = 0; i < args.width; i++) {
+      // printf("%d, %d\n", filled, args.width);
       if (i < filled) {
         // printf("%s\u2588\033[0m", BG_MAGENTA);
         printf("%s \033[0m", BG_MAGENTA);

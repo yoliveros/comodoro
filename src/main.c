@@ -2,15 +2,21 @@
 #include "tui.h"
 #include <locale.h>
 #include <signal.h>
+#include <stdlib.h>
 #include <sys/ioctl.h>
 #include <time.h>
 #include <unistd.h>
 
-#define T_SECONDS 60
-
 volatile sig_atomic_t resized = 0;
 
 void handle_resize(i32 sig) { resized = 1; }
+
+void handle_signal(i32 sig) {
+  tui_clear_screen();
+  tui_show_cursor();
+  tui_enable_input();
+  exit(0);
+}
 
 int main(void) {
   setlocale(LC_ALL, "");
@@ -32,6 +38,8 @@ int main(void) {
   b32 working = TRUE;
 
   signal(SIGWINCH, handle_resize);
+  signal(SIGINT, handle_signal);
+  signal(SIGTERM, handle_signal);
 
   while (1) {
     if (working)
@@ -43,9 +51,6 @@ int main(void) {
     time_t end = start + duration;
 
     for (time_t now = time(NULL); now < end; now = time(NULL)) {
-      b32 check_input = tui_handle_input();
-      if (!check_input)
-        return 0;
 
       f32 progress = (f32)(now - start) / (f32)duration;
       i32 remaining = (i32)(end - now);
@@ -62,9 +67,12 @@ int main(void) {
 
       tui_progress_bar(args);
 
-      sleep(T_SECONDS);
+      b32 check_input = tui_handle_input();
+      if (!check_input)
+        return 0;
+      // sleep(T_SECONDS);
       if (resized) {
-        ioctl(STDIN_FILENO, TIOCGWINSZ, &w);
+        ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
         cols = w.ws_col;
         rows = w.ws_row;
         bar_width = cols - 50;

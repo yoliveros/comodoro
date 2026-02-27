@@ -33,8 +33,7 @@ endif
 
 .PHONY: all clean run prod dev
 
-all: 
-	$(TARGET)
+all: $(TARGET)
 
 $(TARGET): $(OBJS) | $(BUILD_DIR)
 	$(CC) $(OBJS) -o $@ $(C_FLAGS) 
