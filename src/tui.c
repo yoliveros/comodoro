@@ -8,7 +8,7 @@
 #include <termios.h>
 #include <unistd.h>
 
-#define T_SECONDS 60
+#define T_SECONDS 1
 
 struct termios orig_termios;
 
@@ -58,7 +58,8 @@ b32 tui_handle_input(void) {
 
   struct timeval tv = {T_SECONDS, 0};
 
-  if (select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv) > 0) {
+  i32 result = select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv);
+  if (result > 0) {
     char c;
     read(STDIN_FILENO, &c, 1);
     switch (c) {
@@ -69,6 +70,8 @@ b32 tui_handle_input(void) {
       return FALSE;
       break;
     }
+  } else if (result == 0) {
+  } else {
   }
 
   return TRUE;

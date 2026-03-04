@@ -36,7 +36,7 @@ endif
 all: $(TARGET)
 
 $(TARGET): $(OBJS) | $(BUILD_DIR)
-	$(CC) $(OBJS) -o $@ $(C_FLAGS) 
+	$(CC) $(OBJS) -o $@ $(C_FLAGS)
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
 	$(CC) $(C_FLAGS) -c $< -o $@

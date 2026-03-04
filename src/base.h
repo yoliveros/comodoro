@@ -24,30 +24,3 @@ typedef i32 b32;
 
 #define TRUE 1;
 #define FALSE 0;
-
-// String
-typedef struct {
-  u8 *str;
-  u64 len;
-} str;
-
-#define STR_FMT(s) (i32)(s).len, (s).str
-
-#define STR_LIT(s) (str){.str = s, .len = sizeof(s) - 1}
-
-// Platform declaration
-#if defined(_WIN32)
-#define P_WINDOWS 1
-#elif defined(__linux__)
-#define P_LINUX 1
-#endif
-
-static inline u64 KiB(u64 n) { return n << 10; }
-static inline u64 MiB(u64 n) { return n << 20; }
-static inline u64 GiB(u64 n) { return n << 30; }
-
-static inline u64 MIN(i32 a, i32 b) { return a < b ? a : b; }
-static inline u64 MAX(i32 a, i32 b) { return a < b ? a : b; }
-static inline u64 ALIGN_UP_POW2(u64 n, u64 p) {
-  return (n + (p - 1)) & ~(p - 1);
-}
